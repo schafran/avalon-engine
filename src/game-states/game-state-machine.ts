@@ -74,6 +74,7 @@ export class GameStateMachine implements IEventListener {
 
           this.waitFor(() => {
             game.getQuestsManager().nextTeamVotingRound();
+            game.getPlayersManager().nextLeader();
             game.getPlayersManager().reset();
 
             this.setState(game, new TeamPropositionState());
@@ -84,6 +85,7 @@ export class GameStateMachine implements IEventListener {
           this.setState(game, new FrozenState());
 
           this.waitFor(() => {
+            game.getPlayersManager().nextLeader();
             game.getPlayersManager().reset();
 
             game.getQuestsManager().nextQuest();
