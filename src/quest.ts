@@ -133,7 +133,8 @@ export class Quest {
       failsNeededCount: this.failsNeededCount,
       votesNeededCount: this.votesNeededCount,
       teamVotes: this.getSerializedTeamVotes(votesOmitted, resultsConcealed),
-      questVotes: this.getSerializedQuestVotes(votesOmitted, resultsConcealed),
+      questVotes: this.getSerializedQuestVotes(votesOmitted),
+      failsCount: resultsConcealed ? null : this.failsCount(),
     };
   }
 
@@ -149,17 +150,9 @@ export class Quest {
       : votes.map(v => v.serialize());
   }
 
-  private getSerializedQuestVotes(votesOmitted: boolean, resultsConcealed: boolean): VoteSerialized[] {
+  private getSerializedQuestVotes(votesOmitted: boolean): VoteSerialized[] {
     if (votesOmitted) return [];
 
-    if (resultsConcealed) {
-      return this.questVotes.map((v) => new Vote(v.getId(), null).serialize());
-    }
-
-    const votes = this.questVotes.map(v => new Vote(null, v.getValue()));
-
-    votes.sort((a: Vote, b: Vote) => a.getValue() ? -1 : 1);
-
-    return votes.map(vote => vote.serialize());
+    return this.questVotes.map((v) => new Vote(v.getId(), null).serialize());
   }
 }
