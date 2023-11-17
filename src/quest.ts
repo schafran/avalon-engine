@@ -69,12 +69,7 @@ export class Quest {
 
   private addVoteForTeam(vote: Vote) {
     const currentRound = this.getCurrentTeamVotingRound();
-
     currentRound.push(vote);
-
-    if (this.everybodyVotedFor(currentRound) && !this.teamVotingSucceeded()) {
-      this.teamVotingRoundIndex++;
-    }
   }
 
   private addVoteForQuest(vote: Vote) {
@@ -84,6 +79,10 @@ export class Quest {
   questVotingAllowed() {
     return this.teamVotingSucceeded()
       && this.questVotes.length < this.votesNeededCount;
+  }
+
+  nextTeamVotingRound() {
+    this.teamVotingRoundIndex++;
   }
 
   teamVotingSucceeded() {
@@ -108,12 +107,8 @@ export class Quest {
   teamVotingRoundFinished() {
     if (this.teamVotingSucceeded()) return true;
 
-    const previousRound = this.getPreviousTeamVotingRound();
-
-    if (!previousRound) return false;
-
-    return this.everybodyVotedFor(previousRound)
-      && this.getCurrentTeamVotingRound().length === 0;
+    const currentRound = this.getCurrentTeamVotingRound();
+    return this.everybodyVotedFor(currentRound);
   }
 
   private getPreviousTeamVotingRound() {
@@ -143,8 +138,8 @@ export class Quest {
   }
 
   private getSerializedTeamVotes(votesOmitted: boolean, resultsConcealed: boolean): VoteSerialized[] {
-    if (votesOmitted || this.questVotingAllowed() || this.isComplete()) {
-      return [];
+    if (votesOmitted || this.isComplete()) {
+        return [];
     }
 
     const votes = this.getCurrentTeamVotingRound();

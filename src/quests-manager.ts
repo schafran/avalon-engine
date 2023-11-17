@@ -74,6 +74,10 @@ export class QuestsManager {
     this.currentQuestIndex++;
   };
 
+  nextTeamVotingRound() {
+    this.getCurrentQuest().nextTeamVotingRound();
+  }
+
   isLastRoundOfTeamVoting() {
     return this.getCurrentQuest().isLastRoundOfTeamVoting();
   };

@@ -9,6 +9,7 @@ import { RoleId } from './enums/role-id';
 export class PlayersManager {
   private players: Player[]         = [];
   private isSubmitted: boolean      = false;
+  private isApproved: boolean       = null;
   private proposedPlayers: Player[] = [];
   private leaderIndex: number       = -1;
   private victim: Player;
@@ -109,6 +110,10 @@ export class PlayersManager {
     this.isSubmitted = isSubmitted;
   }
 
+  setIsApproved(isApproved: boolean) {
+    this.isApproved = isApproved;
+  }
+
   getIsSubmitted() {
     return this.isSubmitted;
   }
@@ -180,6 +185,7 @@ export class PlayersManager {
 
   reset() {
     this.setIsSubmitted(false);
+    this.setIsApproved(null);
     this.resetVotes();
     this.resetPropositions();
   }
@@ -202,6 +208,7 @@ export class PlayersManager {
       collection: this.serializePlayers(forPlayer, rolesConcealed),
       proposedPlayerIds: this.proposedPlayers.map(p => p.getId()),
       leaderId: PlayersManager.getIdOrNull(this.getLeader()),
+      isApproved: this.isApproved,
       isSubmitted: this.isSubmitted,
       victimId: PlayersManager.getIdOrNull(this.victim),
     };

@@ -73,6 +73,7 @@ export class GameStateMachine implements IEventListener {
           this.setState(game, new FrozenState());
 
           this.waitFor(() => {
+            game.getQuestsManager().nextTeamVotingRound();
             game.getPlayersManager().reset();
 
             this.setState(game, new TeamPropositionState());
@@ -97,14 +98,8 @@ export class GameStateMachine implements IEventListener {
     this.fsm.on(GameState.TeamVoting, (from: GameState) => {
       switch (from) {
         case GameState.TeamProposition:
-          this.setState(game, new FrozenState());
-
-          this.waitFor(() => {
-            game.getPlayersManager().setIsSubmitted(true);
-
-            this.setState(game, new TeamVotingState());
-          }, this.waitTimes.afterTeamProposition);
-
+          game.getPlayersManager().setIsSubmitted(true);
+          this.setState(game, new TeamVotingState());
           break;
       }
     });

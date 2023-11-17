@@ -16,12 +16,14 @@ export class TeamVotingState extends BaseState {
     this.vote(game, id, voteValue);
 
     if (game.getQuestsManager().teamVotingSucceeded()) {
+      game.getPlayersManager().setIsApproved(true);
       game.getFsm().transitionTo(GameState.QuestVoting);
 
       return;
     }
 
     if (game.getQuestsManager().teamVotingRoundFinished()) {
+      game.getPlayersManager().setIsApproved(false);
       game.getFsm().transitionTo(GameState.TeamProposition);
 
       return;
