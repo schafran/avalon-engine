@@ -49,6 +49,7 @@ export class GameStateMachine implements IEventListener {
     //
     this.fsm.from(GameState.TeamVoting).to(GameState.TeamProposition);
     this.fsm.from(GameState.TeamVoting).to(GameState.QuestVoting);
+    this.fsm.from(GameState.TeamVoting).to(GameState.GameLost);
     //
     this.fsm.from(GameState.TeamVotingPreApproved).to(GameState.QuestVoting);
     //
@@ -156,6 +157,7 @@ export class GameStateMachine implements IEventListener {
 
     this.fsm.on(GameState.GameLost, (from: GameState) => {
       switch (from) {
+        case GameState.TeamVoting:
         case GameState.QuestVoting:
         case GameState.Assassination:
           game.getMetaData().finish(GameStatus.Lost);

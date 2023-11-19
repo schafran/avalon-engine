@@ -37,9 +37,7 @@ export class TeamPropositionState extends BaseState {
       throw new fromErrors.RequiredCorrectTeammatesAmountError();
     }
 
-    game.getQuestsManager().isLastRoundOfTeamVoting()
-      ? game.getFsm().transitionTo(GameState.TeamVotingPreApproved)
-      : game.getFsm().transitionTo(GameState.TeamVoting);
+    game.getFsm().transitionTo(GameState.TeamVoting);
   }
 
   private playerAmountIsIncorrect(game: Game) {

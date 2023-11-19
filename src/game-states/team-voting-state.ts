@@ -23,6 +23,10 @@ export class TeamVotingState extends BaseState {
     }
 
     if (game.getQuestsManager().teamVotingRoundFinished()) {
+      if (game.getQuestsManager().isLastRoundOfTeamVoting()) {
+        game.getFsm().transitionTo(GameState.GameLost);
+        return;
+      }
       game.getPlayersManager().setIsApproved(false);
       game.getFsm().transitionTo(GameState.TeamProposition);
 
